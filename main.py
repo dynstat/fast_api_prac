@@ -1,10 +1,17 @@
 from enum import Enum
 from typing import Union
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Path, Query, status, Request, Body, Cookie, Header
+from fastapi.exceptions import HTTPException
+from pydantic import BaseModel, Field
+
 
 app = FastAPI()
+
+
+@app.exception_handler(422)
+async def error422(request: Request, exc: HTTPException):
+    return {"error422": "ye to bekar error hai"}
 
 
 class ModelName(str, Enum):
@@ -14,24 +21,43 @@ class ModelName(str, Enum):
 
 
 class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
+    name: str = Field(example="Foo", title="ye hai name")
+    description: str | None = Field(default=None, example="A very nice Item")
+    price: float = Field(example=35.4)
+    tax: float | None = Field(default=None, example=3.2)
+
+
+class User(BaseModel):
+    username: str = Field(example="username1234")
+    full_name: str | None = Field(example="kanstat", default=None)
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def read_items(req: Request, ads_id: str | None = Cookie(default="h")):
+    return {"ads_id": ads_id}
+
+
+@app.get("/hitems/")
+async def read_items(req: Request, x_token: list[str] | None = Header(default="abcd")):
+    return {"X-Token values": x_token}
 
 
 @app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+async def read_items(
+    req: Request,
+    item_id: int = Path(title="The ID of the item to get", example=2023),
+    q: str | None = Query(default=None),
+):
+    results = {"item_id": item_id}
+    if q:
+        results.update({"q": q})
+    return results
 
 
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+@app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED)
+async def update_item(item_id: int, item: Item, user: User):
+    results = {"item_id": item_id, "item": item, "user": user}
+    return results
 
 
 @app.get("/models/{model_name}")
