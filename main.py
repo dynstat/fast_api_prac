@@ -9,9 +9,9 @@ from pydantic import BaseModel, Field
 app = FastAPI()
 
 
-@app.exception_handler(422)
-async def error422(request: Request, exc: HTTPException):
-    return {"error422": "ye to bekar error hai"}
+# @app.exception_handler(422)
+# async def error422(request: Request, exc: HTTPException):
+#     return {"error422": "ye to bekar error hai"}
 
 
 class ModelName(str, Enum):
@@ -42,7 +42,10 @@ async def read_items(req: Request, x_token: list[str] | None = Header(default="a
     return {"X-Token values": x_token}
 
 
-@app.get("/items/{item_id}")
+@app.get(
+    "/items/{item_id}",
+    responses={422: {"msg": "fix the data type of parameters"}},
+)
 async def read_items(
     req: Request,
     item_id: int = Path(title="The ID of the item to get", example=2023),
