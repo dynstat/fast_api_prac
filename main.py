@@ -1,76 +1,41 @@
-from enum import Enum
-from typing import Union
-
-from fastapi import FastAPI, Path, Query, status, Request, Body, Cookie, Header
-from fastapi.exceptions import HTTPException
-from pydantic import BaseModel, Field
-
+from fastapi import FastAPI
+from pydantic import BaseModel, EmailStr
 
 app = FastAPI()
 
 
-@app.exception_handler(422)
-async def error422(request: Request, exc: HTTPException):
-    return {"error422": "ye to bekar error hai"}
+class UserIn(BaseModel):
+    username: str
+    password: str
+    email: EmailStr
+    full_name: str | None = None
 
 
-class ModelName(str, Enum):
-    alexnet = "alexnet"
-    resnet = "resnet"
-    lenet = "lenet"
+class UserOut(BaseModel):
+    username: str
+    email: EmailStr
+    full_name: str | None = None
 
 
-class Item(BaseModel):
-    name: str = Field(example="Foo", title="ye hai name")
-    description: str | None = Field(default=None, example="A very nice Item")
-    price: float = Field(example=35.4)
-    tax: float | None = Field(default=None, example=3.2)
+class UserInDB(BaseModel):
+    username: str
+    hashed_password: str
+    email: EmailStr
+    full_name: str | None = None
 
 
-class User(BaseModel):
-    username: str = Field(example="username1234")
-    full_name: str | None = Field(example="kanstat", default=None)
+def fake_password_hasher(raw_password: str):
+    return "supersecret" + raw_password
 
 
-@app.get("/")
-async def read_items(req: Request, ads_id: str | None = Cookie(default="h")):
-    return {"ads_id": ads_id}
+def fake_save_user(user_in: UserIn):
+    hashed_password = fake_password_hasher(user_in.password)
+    user_in_db = UserInDB(**user_in.dict(), hashed_password=hashed_password)
+    print("User saved! ..not really")
+    return user_in_db
 
 
-@app.get("/hitems/")
-async def read_items(req: Request, x_token: list[str] | None = Header(default="abcd")):
-    return {"X-Token values": x_token}
-
-
-@app.get("/items/{item_id}")
-async def read_items(
-    req: Request,
-    item_id: int = Path(title="The ID of the item to get", example=2023),
-    q: str | None = Query(default=None),
-):
-    results = {"item_id": item_id}
-    if q:
-        results.update({"q": q})
-    return results
-
-
-@app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED)
-async def update_item(item_id: int, item: Item, user: User):
-    results = {"item_id": item_id, "item": item, "user": user}
-    return results
-
-
-@app.get("/models/{model_name}")
-async def get_model(model_name: ModelName):
-    if model_name is ModelName.alexnet:
-        return {"model_name": model_name, "message": "Deep Learning FTW!"}
-
-    if model_name.value == "lenet":
-        return {"model_name": model_name, "message": "LeCNN all the images"}
-
-    return {"model_name": model_name, "message": "Have some residuals"}
-
-
-@app.get("/files/{file_path:path}")
-async def read_file(file_path: str):
-    return {"file_path": file_path}
+@app.post("/user/", response_model=UserOut)
+async def create_user(user_in: UserIn):
+    user_saved = fake_save_user(user_in)
+    return user_saved
