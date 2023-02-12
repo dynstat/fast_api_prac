@@ -18,46 +18,15 @@ from pydantic import BaseModel, Field
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
 
-
-async def http_exception(request: Request, exc: HTTPException):
-    return JSONResponse(
-        {"detail": "hehe"}, status_code=exc.status_code, headers=exc.headers
-    )
+from cust_exception import validation_exception_handler
 
 
-# exc_handlers = {HTTPException: http_exception}
-exc_handlers = {
-    422: http_exception,
-}
-
-app = FastAPI(exception_handlers=exc_handlers)
+app = FastAPI()
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request, exc):
-    exc_list = exc.errors()
-    resp_json_list = []
-    for e in exc_list:
-        temp_dict = {}
-        std_err_mssg = e["msg"]
-        type_ = e["loc"][0]
-        name = e["loc"][1]
-        add_info = f"422 ERROR - Please check the type of {type_} named {name}."
-        # filling the temp dictionary
-        temp_dict[type_] = name
-        temp_dict["std error"] = std_err_mssg
-        temp_dict["additional info"] = add_info
-
-        # appending this temp dict to resp_json_list
-        resp_json_list.append(temp_dict)
-
-    path_params = request.path_params
-    query_params = request.query_params._dict
-    # return PlainTextResponse(str(exc), status_code=422)
-    return JSONResponse(
-        resp_json_list,
-        status_code=422,
-    )
+async def wrapper_validation_exception_handler(request, exc):
+    return validation_exception_handler(request, exc)
 
 
 class Message(BaseModel):
@@ -80,11 +49,6 @@ class Item(BaseModel):
 class User(BaseModel):
     username: str = Field(example="username1234")
     full_name: str | None = Field(example="kanstat", default=None)
-
-
-# @app.get("/")
-# async def read_items(req: Request, ads_id: str | None = Cookie(default="h")):
-#     return {"ads_id": ads_id}
 
 
 @app.get("/hitems/")
