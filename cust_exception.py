@@ -3,6 +3,15 @@ from fastapi.responses import JSONResponse
 
 # imp: must not be a async func
 def validation_exception_handler(request, exc):
+    """Handles Exception during validations in request parameters and values.
+
+    Args:
+        request (request): http object
+        exc (Exception): Exception
+
+    Returns:
+        JSONResponse: returns the JSONResponse instance
+    """
     exc_list = exc.errors()
     resp_json_list = []
     for e in exc_list:
