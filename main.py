@@ -56,7 +56,7 @@ async def read_items(req: Request, x_token: list[str] | None = Header(default="a
     return {"X-Token values": x_token}
 
 
-@app.get("/items/{item_id}")
+@app.get("/items/{item_id}", tags=["basic"])
 async def read_items(
     req: Request,
     item_id: int = Path(title="The ID of the item to get", example=2023),
@@ -68,7 +68,7 @@ async def read_items(
     return results
 
 
-@app.get("/test/{p1}/{p2}")
+@app.get("/test/{p1}/{p2}", tags=["testing"])
 async def read_items(p1: int, p2: int, q: int | None = None):
     resp = {"p1": p1, "p2": p2}
     if q:
@@ -76,7 +76,7 @@ async def read_items(p1: int, p2: int, q: int | None = None):
     return resp
 
 
-@app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED)
+@app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED, tags=["basic"])
 async def update_item(item_id: int, item: Item, user: User):
     results = {"item_id": item_id, "item": item, "user": user}
     return results
