@@ -1,7 +1,7 @@
-# from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 
+# imp: must not be a async func
 def validation_exception_handler(request, exc):
     exc_list = exc.errors()
     resp_json_list = []
