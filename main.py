@@ -12,14 +12,18 @@ from fastapi import (
     Header,
     File,
     UploadFile,
+    Depends,
 )
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel, Field
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
 
+# importing custom exception handling functions
 from cust_exception import validation_exception_handler
 
+# importing dependencies
+import dependencies_
 
 app = FastAPI()
 
@@ -68,8 +72,16 @@ async def read_items(
     return results
 
 
-@app.get("/test/{p1}/{p2}", tags=["testing"])
-async def read_items(p1: int, p2: int, q: int | None = None):
+# Endpoint for testing purposes
+@app.get(
+    "/test/{p1}/{p2}",
+    tags=["testing"],
+    dependencies=[
+        Depends(dependencies_.verify_key),
+        Depends(dependencies_.verify_token),
+    ],
+)
+async def read_items(req: Request, p1: int, p2: int, q: int | None = None):
     resp = {"p1": p1, "p2": p2}
     if q:
         resp["q"] = q
