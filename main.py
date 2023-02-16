@@ -7,6 +7,7 @@ from fastapi import (
     Query,
     status,
     Request,
+    Response,
     Body,
     Cookie,
     Header,
@@ -86,6 +87,21 @@ async def read_items(req: Request, p1: int, p2: int, q: int | None = None):
     if q:
         resp["q"] = q
     return resp
+
+
+# Endpoint2 for testing purposes
+@app.get("/test2", tags=["testing"])
+async def read_items(req: Request, res: Response):
+    res.set_cookie(key="my_cookie", value="test cookie value")
+    return {"response_data": "test2 endpoint response"}
+
+
+# Endpoint3 for testing purposes
+@app.get("/test3", tags=["testing"])
+async def read_items(
+    req: Request, cuki: str | None = Cookie(default="something", title="cookie test")
+):
+    return {"response_data": "test2 endpoint response", "cuki": cuki}
 
 
 @app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED, tags=["basic"])
