@@ -15,7 +15,6 @@ from fastapi import (
     UploadFile,
     Depends,
 )
-from fastapi.exceptions import HTTPException
 from pydantic import BaseModel, Field
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
@@ -156,8 +155,7 @@ async def create_upload_files(files: list[UploadFile]):
 async def main():
     content = """
 <body>
-
-kanchan
+Testing...
 <h1>This is a heading</h1>
 <p>This is a paragraph.</p>
 <form action="/files/" enctype="multipart/form-data" method="post">
