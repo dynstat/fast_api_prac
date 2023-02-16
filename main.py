@@ -19,12 +19,21 @@ from fastapi.exceptions import HTTPException
 from pydantic import BaseModel, Field
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
+# importing dummy database
+from dummy_db import dummy_DB
+
 
 # importing custom exception handling functions
 from cust_exception import validation_exception_handler
 
 # importing dependencies
 import dependencies_
+
+# OAuth2PasswordBearer returns a class
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 app = FastAPI()
 
@@ -99,9 +108,32 @@ async def read_items(req: Request, res: Response):
 # Endpoint3 for testing purposes
 @app.get("/test3", tags=["testing"])
 async def read_items(
-    req: Request, cuki: str | None = Cookie(default="something", title="cookie test")
+    req: Request,
+    cuki: str
+    | None = Cookie(
+        default="something",
+        title="cookie test",
+    ),
+    token: str = Depends(oauth2_scheme),  # token implementation is not done yet.
 ):
     return {"response_data": "test2 endpoint response", "cuki": cuki}
+
+
+@app.post("/token", tags=["testing"])
+async def authy(req: Request, form_data: OAuth2PasswordRequestForm = Depends()):
+    username = form_data.username
+    plain_password = form_data.password
+    match_user_data = None
+    # finding whether user exists or not
+    for user_data in dummy_DB:
+        if username in user_data["username"]:
+            match_user_data = user_data
+            break
+    # imp: the response MUST have "access_token" and "token_type" as per the specs of OAuth2
+    return {
+        "access_token": "some_random_token_value_BlahBlah",
+        "token_type": "bearer",
+    }
 
 
 @app.post("/items/{item_id}", status_code=status.HTTP_201_CREATED, tags=["basic"])
