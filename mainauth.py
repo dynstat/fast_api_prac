@@ -146,5 +146,6 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 
 
 # MAIN
+# just run or debug the file only (debug without using launch.json debug settings)
 if __name__ == "__main__":
     uvicorn.run("mainauth:app", host="0.0.0.0", port=8000, reload=True)
