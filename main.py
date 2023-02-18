@@ -118,7 +118,7 @@ async def read_items(
     return {"response_data": "test2 endpoint response", "cuki": cuki}
 
 
-@app.post("/token", tags=["testing"])
+@app.post("/token", tags=["Authorization"])
 async def authy(req: Request, form_data: OAuth2PasswordRequestForm = Depends()):
     username = form_data.username
     plain_password = form_data.password
