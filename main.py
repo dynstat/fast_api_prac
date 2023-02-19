@@ -65,12 +65,12 @@ class User(BaseModel):
 
 
 @app.get("/hitems/")
-async def read_items(req: Request, x_token: list[str] | None = Header(default="abcd")):
+async def hitems(req: Request, x_token: list[str] | None = Header(default="abcd")):
     return {"X-Token values": x_token}
 
 
 @app.get("/items/{item_id}", tags=["basic"])
-async def read_items(
+async def read_items_id(
     req: Request,
     item_id: int = Path(title="The ID of the item to get", example=2023),
     q: str | None = Query(default=None),
@@ -90,7 +90,7 @@ async def read_items(
         Depends(dependencies_.verify_token),
     ],
 )
-async def read_items(req: Request, p1: int, p2: int, q: int | None = None):
+async def read_items_2p(req: Request, p1: int, p2: int, q: int | None = None):
     resp = {"p1": p1, "p2": p2}
     if q:
         resp["q"] = q
@@ -99,21 +99,21 @@ async def read_items(req: Request, p1: int, p2: int, q: int | None = None):
 
 # Endpoint2 for testing purposes
 @app.get("/test2", tags=["testing"])
-async def read_items(req: Request, res: Response):
+async def read_items2(req: Request, res: Response):
     res.set_cookie(key="my_cookie", value="test cookie value")
     return {"response_data": "test2 endpoint response"}
 
 
 # Endpoint3 for testing purposes
 @app.get("/test3", tags=["testing"])
-async def read_items(
+async def read_items3(
     req: Request,
     cuki: str
     | None = Cookie(
         default="something",
         title="cookie test",
     ),
-    token: str = Depends(oauth2_scheme),  # token implementation is not done yet.
+    token: str = Depends(oauth2_scheme),  # token implementat+ion is not done yet.
 ):
     return {"response_data": "test2 endpoint response", "cuki": cuki}
 
