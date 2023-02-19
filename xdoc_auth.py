@@ -130,8 +130,8 @@ async def login_for_access_token(
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "payload": req.json(),  # not valid and will be rejected
-        "body": req.body(),  # not valid and will be rejected
+        "payload": req.json(),  # rejected due to pydantic response_model param
+        "body": req.body(),  # rejected due to pydantic response_model param
     }
 
 
