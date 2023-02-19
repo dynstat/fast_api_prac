@@ -46,6 +46,7 @@ class Message(BaseModel):
     message: str
 
 
+# not being used yet
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
@@ -113,7 +114,7 @@ async def read_items3(
         default="something",
         title="cookie test",
     ),
-    token: str = Depends(oauth2_scheme),  # token implementat+ion is not done yet.
+    token: str = Depends(oauth2_scheme),  # token implementation is not done yet.
 ):
     return {"response_data": "test2 endpoint response", "cuki": cuki}
 
