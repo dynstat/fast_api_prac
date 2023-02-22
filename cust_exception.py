@@ -19,7 +19,7 @@ def validation_exception_handler(request, exc):
         std_err_mssg = e["msg"]
         type_ = e["loc"][0]
         name = e["loc"][1]
-        add_info = f"422 ERROR - Please check the type of {type_} named {name}."
+        add_info = f"422 ERROR - Please check the type of {type_} named {name}."  # creating a custom field.
         # filling the temp dictionary
         temp_dict[type_] = name
         temp_dict["std error"] = std_err_mssg
