@@ -22,7 +22,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 # importing dummy database
-from dummy_db import dummy_DB
+from dummyDB.dummy_db import dummy_DB
 
 
 # importing custom exception handling functions
