@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "bckgnd:app",
+                "testing.main:app",
                 "--reload"
             ],
             "jinja": true,
