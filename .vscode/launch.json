@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "testing.main:app",
+                "testing.routers:app",
                 "--reload"
             ],
             "jinja": true,
