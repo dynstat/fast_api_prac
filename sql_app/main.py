@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
@@ -16,7 +16,7 @@ app = FastAPI()
 
 # get user by id
 @app.get("/users/{user_id}", response_model=schemas.User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
+def read_user(req: Request, user_id: int, db: Session = Depends(get_db)):
     matched_user = crud.get_user_by_id(db=db, user_id=user_id)
     if not matched_user:
         raise HTTPException(status_code=404, detail="User Not Found in Database")
