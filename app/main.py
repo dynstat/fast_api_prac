@@ -26,10 +26,10 @@ from dummyDB.dummy_db import dummy_DB
 
 
 # importing custom exception handling functions
-from cust_exception import validation_exception_handler
+from .cust_exception import validation_exception_handler
 
 # importing dependencies
-import dependencies_
+from . import dependencies_
 
 # OAuth2PasswordBearer returns a class
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -153,7 +153,7 @@ async def create_upload_files(files: list[UploadFile]):
     return {"filenames": [file.filename for file in files]}
 
 
-@app.get("/", include_in_schema=False)
+@app.get("/", response_class=HTMLResponse, include_in_schema=True)
 async def main():
     content = """
 <body>
