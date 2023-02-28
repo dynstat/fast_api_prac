@@ -10,11 +10,13 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
+
                 "todo_app.main:app",
+
                 "--reload"
             ],
             "jinja": true,
-            "justMyCode": true
+            "justMyCode": false
         }
     ]
 }
