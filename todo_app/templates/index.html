@@ -6,15 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo App</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}"> -->
 </head>
 
 <body>
     <main>
         <h1>ToDo App</h1>
         <br>
+        <form action="/add_task" , method="post">
+            <textarea name="task" id="task" rows="10" placeholder="Enter your task"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+        <br>
         {% block content %}
-
+        {% for todo in to_dos %}
+        <p id="task">{{ todo.task }}</p> <br>
+        {% endfor %}
         {% endblock content %}
     </main>
 </body>
