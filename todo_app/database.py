@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-DB_URL = "sqlite:///todo.sqlite3"
+DB_URL = "sqlite:///./todo_app/todo_db.sqlite3."
 
 # creating engine 
 
