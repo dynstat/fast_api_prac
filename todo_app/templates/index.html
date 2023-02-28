@@ -1,29 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo App</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}"> -->
-</head>
+<form action="/add_task" , method="post">
+    <textarea name="task" id="task" rows="10" placeholder="Enter your task"></textarea>
+    <button type="submit">Add Task</button>
+</form>
+<br>
+<h2>Tasks</h2>
 
-<body>
-    <main>
-        <h1>ToDo App</h1>
-        <br>
-        <form action="/add_task" , method="post">
-            <textarea name="task" id="task" rows="10" placeholder="Enter your task"></textarea>
-            <button type="submit">Add Task</button>
-        </form>
-        <br>
-        {% block content %}
-        {% for todo in to_dos %}
-        <p id="task">{{ todo.task }}</p> <br>
-        {% endfor %}
-        {% endblock content %}
-    </main>
-</body>
+{% for todo in to_dos %}
+<div id="task">
+    {% if todo.completed %}
+        <strike>{{ todo.task }}</strike>
+    {% else %}
+        {{ todo.task }} <br>
+    {% endif %}
+    <small>
+    <a href= "/edit/{{ todo.id }}">Edit</a>
 
-</html>
+    <a href = "/delete/{{ todo.id }}">Delete</a>
+    </small>
+</div>
+    {% endfor %}
+
+{% endblock content %}
