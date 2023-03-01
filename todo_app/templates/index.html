@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="/add_task" , method="post">
+<form action="/tasks/add_task" , method="post">
     <textarea name="task" id="task" rows="10" placeholder="Enter your task"></textarea>
     <button type="submit">Add Task</button>
 </form>
@@ -10,6 +10,9 @@
 
 {% for todo in to_do %}
     {{ todo.task }} <br>
+    <a href="/tasks/edit_task/{{ todo.id }}">Edit</a>
+    <a href="/task/delete_task/{{ todo.id }}">Delete</a>
 {% endfor %}
+
 
 {% endblock content %}

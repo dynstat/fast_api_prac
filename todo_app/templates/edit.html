@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="/edit/{{ todo.id }}" method="post">
-    <textarea name="task" rows="5">{{todo.task}}</textarea>
-    <label for="completed">Done?</label>
-    <input type="checkbox" name="completed" {% if todo.completed %}checked{% endif %}>
+<form action="/tasks/edit_task/{{ task_tobe_edit.id }}" method="post">
+    <textarea name="task" rows="5">{{ task_tobe_edit.task }}</textarea>
 
     <button type="submit">Save</button>
 </form>
