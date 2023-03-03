@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from fastapi import Depends, FastAPI, HTTPException, status, Request, Body
+from fastapi import Depends, FastAPI, HTTPException, status, Request, Body, Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -140,6 +140,27 @@ async def login_for_access_token(
 @app.get("/users/me/", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
+
+
+@app.get("/users/all", response_model=dict[str, User])
+async def read_all_users(encoded_token: str = Depends(oauth2_scheme)):
+    payload = jwt.decode(encoded_token, SECRET_KEY, algorithms=[ALGORITHM])
+    username = payload["sub"]  # extracting the username from jwt payload
+
+    if username not in fake_users_db:
+        raise HTTPException(status_code=404, detail="NOT A VALID USER !!")
+    return fake_users_db
+
+
+# Endpoint without using oauth2_scheme provided by fastAPI. Handling the JWT token manually.
+@app.get("/users/all2", response_model=dict[str, User])
+async def read_all_users(encoded_token: str = Cookie(title="encoded_token")):
+    payload = jwt.decode(encoded_token, SECRET_KEY, algorithms=[ALGORITHM])
+    username = payload["sub"]  # extracting the username from jwt payload
+
+    if username not in fake_users_db:
+        raise HTTPException(status_code=404, detail="NOT A VALID USER !!")
+    return fake_users_db
 
 
 @app.get("/users/me/items/")
