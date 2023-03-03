@@ -47,6 +47,8 @@ class UserInDB(User):
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
+# tokenUrl="token" parameter indicates that authentication with happen in "/token" endpoint.
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app = FastAPI()
