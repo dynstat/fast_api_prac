@@ -6,6 +6,5 @@ my_cookie = {
 }
 
 resp = requests.get("http://127.0.0.1:8000/users/all2", cookies=my_cookie)
-# resp = requests.get("http://www.google.com", cookies=my_cookie)
 
 print(resp.content)
