@@ -38,6 +38,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI()
 
 
+# function to handle and send a custom response for the "RequestValidationError"
 @app.exception_handler(RequestValidationError)
 async def wrapper_validation_exception_handler(request, exc):
     return validation_exception_handler(request, exc)
