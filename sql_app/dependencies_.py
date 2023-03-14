@@ -6,6 +6,6 @@ from .database import sessionLocal
 def get_db():
     db: Session = sessionLocal()
     try:
-        yield db  # sends the created database session
+        yield db  # sends the created database session and haults
     finally:
-        db.close()  # this statemnt gets excuted only in the end of function body.
+        db.close()  # this statement gets excuted only in the end of function body.
