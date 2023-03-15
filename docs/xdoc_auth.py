@@ -1,3 +1,7 @@
+#  testing the oauth2 using a dummy database like dictionary, with the help of JWT tokens.
+#  Implementation of refresh token is not shown in this example, only the access token is shown.
+
+
 from datetime import datetime, timedelta
 
 from fastapi import Depends, FastAPI, HTTPException, status, Request, Body, Cookie
@@ -77,6 +81,7 @@ def authenticate_user(fake_db, username: str, password: str):
     return user
 
 
+#  creates and returns a JWT access token, jwt library imported above.
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
