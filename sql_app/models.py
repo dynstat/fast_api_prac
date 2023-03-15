@@ -6,6 +6,8 @@ from .database import DeclBase
 
 
 #  These model classes are used for creating the tables in the database.
+
+
 class User(DeclBase):
     __tablename__ = "users"  # defines the name of table in the database
 
