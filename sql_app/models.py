@@ -22,7 +22,7 @@ class User(DeclBase):
 
 
 class Item(DeclBase):
-    __tablename__ = "items"
+    __tablename__ = "items"  # defines the name of table in the database
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
