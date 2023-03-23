@@ -6,6 +6,6 @@ from .database import sessionLocal
 def get_db():
     db: Session = sessionLocal()
     try:
-        yield db  # sends the created database session and haults
+        yield db  # sends the created database session and haults, can be run when "next()" method is called (internally).
     finally:
         db.close()  # this statement gets excuted only in the end of function body.
