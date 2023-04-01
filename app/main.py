@@ -80,7 +80,7 @@ async def read_items_id(
 ):
     results = {"item_id": item_id}
     if q:
-        results.update({"q": q})
+        results.update({"q": q}) # type: ignore
     return results
 
 
